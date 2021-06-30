@@ -9,9 +9,10 @@ var boats = [];
 
 var boatAnimation = [];
 var boatSpritedata, boatSpritesheet;
+//boatSpritedata will contain data from JSON
+//boatSpritesheet will contain the images
 
-
-
+//loading JSON and image for boat
 function preload() {
   backgroundImg = loadImage("./assets/background.gif");
   towerImage = loadImage("./assets/tower.png");
@@ -29,12 +30,21 @@ function setup() {
   tower = new Tower(150, 350, 160, 310);
   cannon = new Cannon(180, 110, 110, 50, angle);
 
+  //boatFrames variable contains the frames data from the JSON in variable boatSpritedata
   var boatFrames = boatSpritedata.frames;
   for (var i = 0; i < boatFrames.length; i++) {
     var pos = boatFrames[i].position;
     var img = boatSpritesheet.get(pos.x, pos.y, pos.w, pos.h);
     boatAnimation.push(img);
   }
+  /*
+  variable pos is used to get the position of each frame from boatFrames.
+  
+  variable img is used to get the image from the boatSpritesheet which matches the
+  position that we got in the pos variable.
+  
+  Then push this image in the boatAnimation array.
+  */
 
 
 }
@@ -73,7 +83,6 @@ function draw() {
 }
 
 
-//creating the cannon ball on key press
 function keyPressed() {
   if (keyCode === DOWN_ARROW) {
     var cannonBall = new CannonBall(cannon.x, cannon.y);
@@ -83,7 +92,6 @@ function keyPressed() {
   }
 }
 
-// function to show the ball.
 function showCannonBalls(ball, index) {
   ball.display();
   if (ball.body.position.x >= width || ball.body.position.y >= height - 50) {
@@ -92,8 +100,7 @@ function showCannonBalls(ball, index) {
   }
 }
 
-
-//function to show the boat
+//modify function to pass boatAnimation to Boat constructor when making a new boat
 function showBoats() {
   if (boats.length > 0) {
     if (
@@ -102,6 +109,7 @@ function showBoats() {
     ) {
       var positions = [-40, -60, -70, -20];
       var position = random(positions);
+      //pass additional argument boatAnimation
       var boat = new Boat(
         width,
         height - 100,
@@ -121,11 +129,15 @@ function showBoats() {
       });
 
       boats[i].display();
+      //animate the boats
       boats[i].animate();
       var collision = Matter.SAT.collides(tower.body, boats[i].body);
 
     }
-  } else {
+  } 
+  else 
+  {
+    //pass additional argument boatAnimation
     var boat = new Boat(width, height - 60, 170, 170, -60, boatAnimation);
     boats.push(boat);
   }
